@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Flower Predictor</title>
+</head>
+<body>
+    <h2>Iris Flower Type Prediction</h2>
+    <form id="irisForm">
+        <label>Sepal Length:</label>
+        <input type="number" step="0.1" id="sepal_length" required><br>
+                                            
+        <label>Sepal Width:</label>
+        <input type="number" step="0.1" id="sepal_width" required><br>
+
+        <label>Petal Length:</label>
+        <input type="number" step="0.1" id="petal_length" required><br>
+
+        <label>Petal Width:</label>
+        <input type="number" step="0.1" id="petal_width" required><br>
+
+        <button type="button" onclick="predictIris()">Predict</button>
+    </form>
+
+    <h3>Prediction: <span id="result">---</span> Flower</h3>
+
+    <script>
+        async function predictIris() {
+            let features = [
+                parseFloat(document.getElementById("sepal_length").value),
+                parseFloat(document.getElementById("sepal_width").value),
+                parseFloat(document.getElementById("petal_length").value),
+                parseFloat(document.getElementById("petal_width").value)
+            ];
+
+            let response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ features: features })
+            });
+
+            let data = await response.json();
+            document.getElementById("result").innerText = data.prediction;
+        }
+    </script>
+</body>
+</html>
